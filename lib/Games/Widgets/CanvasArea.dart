@@ -31,8 +31,12 @@ class _CanvasAreaState extends State<CanvasArea> {
 
   // Método para generar frutas en el mundo físico
   void _spawnRandomFruit() {
+    final randomPositionX = Random().nextDouble() * 300.0; // Posición aleatoria en el eje X
+    final randomDirectionX = (Random().nextDouble() - 0.5) * 2.0; // Dirección aleatoria (izquierda/derecha)
+    final randomDirectionY = Random().nextDouble() * -3.0 - 2.0; // Movimiento hacia arriba (valores negativos para ir arriba)
+
     final bodyDef = BodyDef()
-      ..position = Vector2(0, 200)
+      ..position = Vector2(randomPositionX, 300) // La fruta empieza en una posición aleatoria
       ..type = BodyType.dynamic; // Cuerpo dinámico, sujeto a la gravedad
 
     final body = world.createBody(bodyDef);
@@ -46,6 +50,9 @@ class _CanvasAreaState extends State<CanvasArea> {
       ..restitution = 0.5;  // Rebote de la fruta
 
     body.createFixture(fixtureDef);
+
+    // Establecemos las velocidades iniciales
+    body.linearVelocity.setValues(randomDirectionX * 10.0, randomDirectionY * 10.0);
 
     setState(() {
       _fruits.add(Fruit(
@@ -63,9 +70,15 @@ class _CanvasAreaState extends State<CanvasArea> {
 
     setState(() {
       // Actualizamos las frutas según el mundo físico
+      // Ahora se actualizan las posiciones y los valores de las frutas
       for (Fruit fruit in _fruits) {
-        // La gravedad y el movimiento ya están gestionados por Forge2D
+        // Actualizamos la posición de la fruta
+        fruit.updatePosition();
       }
+    });
+// Generamos una nueva fruta cada 2 segundos
+    Future.delayed(Duration(seconds: 2), () {
+      _spawnRandomFruit();
     });
 
     Future<void>.delayed(Duration(milliseconds: 30), _tick);
@@ -132,13 +145,13 @@ class _CanvasAreaState extends State<CanvasArea> {
     List<Widget> list = <Widget>[];
 
     for (Fruit fruit in _fruits) {
-      final worldPos = fruit.body?.worldCenter ?? Vector2.zero();
+      final worldPos = fruit.body?.position;  // Usa la posición del cuerpo
       list.add(
         Positioned(
-          top: worldPos.y,
-          left: worldPos.x,
+          top: worldPos?.y,
+          left: worldPos?.x,
           child: Transform.rotate(
-            angle: fruit.rotation * pi * 2,
+            angle: fruit.rotation,  // Usamos la rotación que se actualiza
             child: _getMelon(fruit),
           ),
         ),
