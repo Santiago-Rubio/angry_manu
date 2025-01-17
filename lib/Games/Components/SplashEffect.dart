@@ -1,29 +1,45 @@
-
 import 'package:flame/components.dart';
-import 'package:flame_forge2d/forge2d_game.dart';
-import '../../Fruits/fruit.dart';
+import 'package:flame/flame.dart';
+import 'package:flutter/painting.dart';
 
-class FruitSpawner extends Component with HasGameRef<Forge2DGame> {
-  late Timer _timer;
+class SplashEffect extends SpriteAnimationComponent {
+  final Vector2 initialPosition;
 
-  FruitSpawner() {
-    _timer = Timer(2, repeat: true, onTick: spawnFruit);
-  }
+  SplashEffect({
+    required this.initialPosition,
+  });
 
   @override
-  void onMount() {
-    _timer.start();
-    super.onMount();
+  Future<void> onLoad() async {
+    super.onLoad();
+    position = initialPosition; // Posición de la fruta al cortarla
+    size = Vector2(40, 40);     // Tamaño de la animación
+
+    // Cargar las imágenes de la animación
+    final sprites = await Future.wait([
+      Flame.images.load('cut1.png'),
+      Flame.images.load('cut2.png'),
+      Flame.images.load('cut3.png'),
+      Flame.images.load('cut4.png'),
+    ]);
+
+    // Crear la animación con los sprites cargados
+    animation = SpriteAnimation.spriteList(
+      sprites.map((image) => Sprite(image)).toList(),
+      stepTime: 0.1,  // Tiempo entre cada frame
+      loop: false,    // Animación no se repite
+    );
   }
 
   @override
   void update(double dt) {
-    _timer.update(dt);
     super.update(dt);
+
+    // Si la animación ha terminado, removemos el componente
+    // Verificar si la animación ha terminado
+    if (animationTicker?.done() == true) {
+      removeFromParent(); // Eliminar el componente si terminó
+    }
   }
 
-  void spawnFruit() {
-    final position = Vector2(gameRef.size.x * 0.5, gameRef.size.y - 1); // Genera frutas desde abajo.
-    gameRef.add(Fruit(position)
-  }
 }
