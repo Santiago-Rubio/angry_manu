@@ -4,26 +4,31 @@ import 'package:flame/forge2d/position_body_component.dart';
 
 
 class Fruit extends PositionBodyComponent {
-  double speed = 300; // Velocidad de ascenso de la fruta
-  bool isCut = false; // Estado de la fruta (si está cortada o no)
+  final Vector2 position;
+
+  Fruit(this.position) : super(paint: Paint()..color = const Color(0xFF00FF00));
 
   @override
-  Future<void> onLoad() async {
-    sprite = await gameRef.loadSprite('fruit.png'); // Reemplaza con tu sprite de fruta
-    position = Vector2(gameRef.size.x * 0.5, gameRef.size.y);
+  Body createBody() {
+    final bodyDef = BodyDef()
+      ..type = BodyType.dynamic
+      ..position = position;
+
+    final body = world.createBody(bodyDef);
+
+    final shape = CircleShape()..radius = 0.5; // Tamaño de la fruta.
+    final fixtureDef = FixtureDef(shape)
+      ..restitution = 0.5 // Rebote
+      ..density = 1.0
+      ..friction = 0.2;
+
+    body.createFixture(fixtureDef);
+    return body;
   }
 
   @override
-  void update(double dt) {
-    super.update(dt);
-    if (!isCut) {
-      position.y -= speed * dt; // Mueve la fruta hacia arriba
-    }
-  }
-
-  void cut() {
-    // Logica para cortar la fruta, añadiendo efectos visuales o animaciones
-    isCut = true;
-    removeFromParent();
+  void render(Canvas canvas) {
+    super.render(canvas);
+    canvas.drawCircle(Offset.zero, 50, paint); // Dibujar la fruta.
   }
 }
