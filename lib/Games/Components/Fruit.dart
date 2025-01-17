@@ -1,40 +1,27 @@
-import 'package:flame/components.dart';
-import 'package:flame_forge2d/flame_forge2d.dart';
+import 'dart:ui';
 
+import 'package:forge2d/forge2d.dart';
 
-class Fruit extends BodyComponent {
-  final Vector2 position;
-  final Vector2 velocity;
-  final double width;
-  final double height;
+class Fruit {
+  Body? body;
+  double width;
+  double height;
+  double rotation;
 
   Fruit({
-    required this.position,
-    required this.velocity,
-    this.width = 10.0,
-    this.height = 10.0,
+    required this.body,
+    required this.width,
+    required this.height,
+    required this.rotation,
   });
 
-  @override
-  Future<void> onLoad() async {
-    super.onLoad();
-  }
 
-  @override
-  Body createBody() {
-    final shape = CircleShape()..radius = width / 2;
-
-    final bodyDef = BodyDef()
-      ..position = position
-      ..type = BodyType.dynamic;
-
-    final fixtureDef = FixtureDef(shape)
-      ..restitution = 0.6
-      ..density = 0.8;
-
-    final body = world.createBody(bodyDef);
-    body.createFixture(fixtureDef);
-    body.applyLinearImpulse(velocity);
-    return body;
+  bool isPointInside(Offset point) {
+    // Usamos la posición del cuerpo para detectar la colisión
+    final worldPos = body?.worldCenter ?? Vector2.zero();
+    return point.dx >= worldPos.x &&
+        point.dx <= worldPos.x + width &&
+        point.dy >= worldPos.y &&
+        point.dy <= worldPos.y + height;
   }
 }
