@@ -1,7 +1,9 @@
-import 'package:flame_forge2d/forge2d.dart';
 import 'package:flame/components.dart';
+import 'package:flame/forge2d/forge2d_component.dart';
+import 'package:flame/forge2d/position_body_component.dart';
 
-class Fruit extends BodyComponent {
+
+class Fruit extends PositionBodyComponent {
   double speed = 300; // Velocidad de ascenso de la fruta
   bool isCut = false; // Estado de la fruta (si está cortada o no)
 
