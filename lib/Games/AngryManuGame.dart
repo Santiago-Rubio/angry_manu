@@ -3,25 +3,35 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
-import 'package:flame/forge2d/forge2d_game.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flame_forge2d/forge2d_game.dart';
+import '../Fruits/fruit.dart';
+import 'Components/Slicer.dart';
+import 'Utils/RandomGenerator.dart';
 
-class AngryManuGame extends Forge2DGame with HasTappableComponents, HasDraggableComponents {
-  AngryManuGame() : super(gravity: Vector2(0, 10)); // Gravedad hacia abajo.
+class AngryManuGame extends Forge2DGame {
+  AngryManuGame() : super(gravity: Vector2(0, 10), zoom: 10);
 
 
-  @override
-  bool get debugMode => true;
+  late Slicer blade;
+  final RandomGenerator random = RandomGenerator();
+
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
 
-    // Añadimos el spawner para generar frutas.
-    add(FruitSpawner());
+    // Añadir la cuchilla
+    blade = Slicer();
+    add(blade);
 
-    // Añadimos el slicer para detectar gestos de corte.
-    add(Slicer());
+    // Generar frutas periódicamente
+    addFruitPeriodically();
+  }
+
+  void addFruitPeriodically() {
+    Timer.periodic(Duration(seconds: 2), (timer) {
+      final fruit = Fruit(random.generatePosition(), random.generateVelocity());
+      add(fruit);
+    });
   }
 }
