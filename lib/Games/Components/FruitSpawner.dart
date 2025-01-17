@@ -17,12 +17,14 @@ class FruitSpawner extends Component with HasGameRef<Forge2DGame> {
   void _spawnFruit() {
     final position = Vector2(gameRef.size.x / 2, gameRef.size.y - 20);
     final velocity = VectorHelpers.rotate(Vector2(0, -10), _randomAngle());
+
+
     gameRef.add(Fruit(
       position: position,
       velocity: velocity,
       width: 20, // Asigna un valor adecuado para el ancho
       height: 20, // Asigna un valor adecuado para la altura
-    ) as Component);
+    ));
   }
 
   double _randomAngle() {

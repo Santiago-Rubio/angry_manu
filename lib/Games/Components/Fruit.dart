@@ -1,5 +1,5 @@
+import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-
 
 
 class Fruit extends BodyComponent {
@@ -14,6 +14,11 @@ class Fruit extends BodyComponent {
     this.width = 10.0,
     this.height = 10.0,
   });
+
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+  }
 
   @override
   Body createBody() {
