@@ -1,4 +1,4 @@
-import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
 import '../../Fruits/fruit.dart';
@@ -24,6 +24,6 @@ class FruitSpawner extends Component with HasGameRef<Forge2DGame> {
 
   void spawnFruit() {
     final position = Vector2(gameRef.size.x * 0.5, gameRef.size.y - 1); // Genera frutas desde abajo.
-    gameRef.add(Fruit(position));
+    gameRef.add(Fruit(position)
   }
 }

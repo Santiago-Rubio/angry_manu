@@ -1,16 +1,23 @@
 import 'package:flame_forge2d/flame_forge2d.dart';
-import '../Utils/VectorHelpers.dart';
+
 
 
 class Fruit extends BodyComponent {
   final Vector2 position;
   final Vector2 velocity;
+  final double width;
+  final double height;
 
-  Fruit({required this.position, required this.velocity});
+  Fruit({
+    required this.position,
+    required this.velocity,
+    this.width = 10.0,
+    this.height = 10.0,
+  });
 
   @override
   Body createBody() {
-    final shape = CircleShape()..radius = 1.0;
+    final shape = CircleShape()..radius = width / 2;
 
     final bodyDef = BodyDef()
       ..position = position
@@ -22,7 +29,7 @@ class Fruit extends BodyComponent {
 
     final body = world.createBody(bodyDef);
     body.createFixture(fixtureDef);
-    body.applyLinearImpulse(VectorHelpers.clampMagnitude(velocity, 10));
+    body.applyLinearImpulse(velocity);
     return body;
   }
 }
