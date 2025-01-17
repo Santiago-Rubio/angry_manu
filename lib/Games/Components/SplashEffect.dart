@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flame/components.dart';
-import 'package:flame/forge2d/forge2d_game.dart';
-import 'fruit.dart';
+import 'package:flame_forge2d/forge2d_game.dart';
+import '../../Fruits/fruit.dart';
 
 class FruitSpawner extends Component with HasGameRef<Forge2DGame> {
   late Timer _timer;
