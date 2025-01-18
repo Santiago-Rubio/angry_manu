@@ -22,6 +22,7 @@ class _CanvasAreaState extends State<CanvasArea> {
 
   @override
   void initState() {
+
     super.initState();
     world = World(Vector2(0, 15.8)); // Gravedad de 9.8 m/s²
 
@@ -47,27 +48,36 @@ class _CanvasAreaState extends State<CanvasArea> {
       return;
     }
 
-    final randomPositionX = Random().nextDouble() * 300.0;
-    final randomDirectionX = (Random().nextDouble() - 0.5) * 4.0;
-    final randomDirectionY = Random().nextDouble() * -4.0 - 2.0;
+    // Obtener el tamaño de la pantalla
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
+    // Posición de inicio de la fruta (en la parte inferior)
+    final randomPositionX = Random().nextDouble() * screenWidth;
+    final randomDirectionX = (Random().nextDouble() - 0.5) * 6.0; // Movimiento aleatorio horizontal
+    final randomDirectionY = -Random().nextDouble() * 5.0 - 5.0; // Movimiento hacia arriba más rápido
+
+    // Definición del cuerpo en el mundo físico
     final bodyDef = BodyDef()
-      ..position = Vector2(randomPositionX, 300)
+      ..position = Vector2(randomPositionX, screenHeight) // Posición inicial en la parte inferior
       ..type = BodyType.dynamic;
 
     final body = world.createBody(bodyDef);
 
+    // Creación de la forma de la fruta (círculo)
     final shape = CircleShape()..radius = 40.0;
     final fixtureDef = FixtureDef(shape)
       ..density = 1.0
       ..friction = 0.3
-      ..restitution = 0.5;
+      ..restitution = 0.5; // Bounciness (rebote)
 
     body.createFixture(fixtureDef);
 
-    body.linearVelocity.setValues(randomDirectionX * 10.0, randomDirectionY * 10.0);
+    // Velocidad inicial aleatoria (lanzamiento parabólico)
+    body.linearVelocity.setValues(randomDirectionX * 15.0, randomDirectionY * 15.0);
 
     setState(() {
+      // Agregar la fruta a la lista de frutas
       _fruits.add(Fruit(
         body: body,
         width: 80,
