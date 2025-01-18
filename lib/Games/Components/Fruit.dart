@@ -7,12 +7,14 @@ class Fruit {
   double width;
   double height;
   double rotation;
+  //final String type;  // Campo para el tipo de fruta
 
   Fruit({
     required this.body,
     required this.width,
     required this.height,
     required this.rotation,
+    //required this.type,  // Inicialización del tipo
   });
 
 

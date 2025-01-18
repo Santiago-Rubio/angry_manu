@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'Games/Widgets/CanvasArea.dart';
+import 'Games/Widgets/CanvasAreaV1.dart';
 
 void main() {
   runApp(MyApp());
